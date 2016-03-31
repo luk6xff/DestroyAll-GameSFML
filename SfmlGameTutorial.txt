@@ -1,0 +1,42 @@
+- Install newest SFML library from  http://www.sfml-dev.org/download/sfml/2.3.2/
+I have chosen ver. Visual C++ 14 (2015) - 64-bit 
+
+Creating and configuring a SFML project under Microsoft Visual Studio 2015
+
+- Choose New Project (Win32 Console Application)
+- Click Project/<your app name> Property Pages
+- Change Configuration to All Configurations
+- Set up correct target platform type: eg. Platform: Active(x64)
+- Add the following paths:
+SFML headers path (<sfml-install-path>/include) to C/C++ » General » Additional Include Directories
+SFML libraries path (<sfml-install-path>/lib) to Linker » General » Additional Library Directories
+
+The next step is to link your application to the SFML libraries (.lib files) that your code will need. SFML is made of 5 modules (system, window, graphics, network and audio), and there's one library for each of them.
+Libraries must be added in the project's properties, in Linker » Input » Additional Dependencies. Add all the SFML libraries that you need, for example "sfml-graphics.lib", "sfml-window.lib" and "sfml-system.lib".
+
+It is important to link to the libraries that match the configuration: "sfml-xxx-d.lib" for Debug, and "sfml-xxx.lib" for Release. A bad mix may result in crashes.
+
+The settings shown here will result in your application being linked to the dynamic version of SFML, the one that needs the DLL files. If you want to get rid of these DLLs and have SFML directly integrated into your executable, you must link to the static version. Static SFML libraries have the "-s" suffix: "sfml-xxx-s-d.lib" for Debug, and "sfml-xxx-s.lib" for Release.
+In this case, you'll also need to define the SFML_STATIC macro in the preprocessor options of your project.
+
+For dynamic linking you need to add in Linker » Input » Additional Dependencies the following names:
+Configuration [RELEASE]
+sfml-window.lib
+sfml-graphics.lib
+sfml-audio.lib
+sfml-network.lib
+sfml-system.lib
+
+Configuration [DEBUG]
+sfml-window-d.lib
+sfml-graphics-d.lib
+sfml-audio-d.lib
+sfml-network-d.lib
+sfml-system-d.lib
+
+Now compile the project, and if you linked to the dynamic version of SFML, don't forget to copy the SFML DLLs (they are in <sfml-install-path/bin>) to the directory where your compiled executable is. Run it, and if everything works you should see this:
+
+
+
+
+As a vehicle i used http://millionthvector.blogspot.com/p/free-sprites.html
