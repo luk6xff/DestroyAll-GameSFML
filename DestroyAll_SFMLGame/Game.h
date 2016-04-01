@@ -1,5 +1,15 @@
 #pragma once
 #include<SFML\Graphics.hpp>
+#include "ResourceHolder.h"
+
+namespace Textures
+{
+	enum ID
+	{
+		Landscape,
+		Vehicle,
+	};
+}
 
 
 struct Movement
@@ -28,8 +38,8 @@ private:
 
 private:
 	Movement mMovementDirection;
+	ResourceHolder<sf::Texture, Textures::ID> mTextures;
 	sf::RenderWindow mWindow;
-	sf::Texture mTexture;
 	sf::Sprite mPlayer;
 
 };

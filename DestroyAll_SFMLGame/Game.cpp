@@ -1,18 +1,27 @@
 #include "Game.h"
 #include <iostream>
+#include "ResourceHolder.h"
+
+
 
 
 const float Game::PlayerSpeed = 100.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 
-Game::Game():mWindow(sf::VideoMode(640,480),"DestroyAll by igbt6 (2015)"),mTexture(), mPlayer(), mMovementDirection()
+Game::Game():mWindow(sf::VideoMode(640,480),"DestroyAll by igbt6 (2015)"), mPlayer(), mMovementDirection(),mTextures()
 {
-	if (!mTexture.loadFromFile("Media/Textures/falcon.png"))
+	
+	try 
 	{
-		std::cout << "Media/Textures/falcon.png not found !!!!";
+		mTextures.load(Textures::Vehicle, "Media/Textures/falcon.png");
 	}
-	mPlayer.setTexture(mTexture);
+	catch (std::runtime_error& e)
+	{
+		std::cout << "Runtime Exception: " << e.what() << std::endl;
+	}
+
+	mPlayer.setTexture(mTextures.get(Textures::Vehicle));
 	mPlayer.setPosition(640/2.f, 480/2.f);
 	mPlayer.setScale(0.4, 0.4);
 
