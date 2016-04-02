@@ -1,30 +1,25 @@
 #include "Game.h"
 #include <iostream>
 #include "ResourceHolder.h"
+#include "StringHelpers.hpp"
 
 
 
 
-const float Game::PlayerSpeed = 100.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 
-Game::Game():mWindow(sf::VideoMode(640,480),"DestroyAll by igbt6 (2015)"), mPlayer(), mMovementDirection(),mTextures()
+Game::Game():mWindow(sf::VideoMode(640,480),"DestroyAll by igbt6 (2015)",sf::Style::Close),
+  mWorld(mWindow)
+, mFont()
+, mStatisticsText()
+, mStatisticsUpdateTime()
+, mStatisticsNumFrames(0)
 {
-	
-	try 
-	{
-		mTextures.load(Textures::Vehicle, "Media/Textures/falcon.png");
-	}
-	catch (std::runtime_error& e)
-	{
-		std::cout << "Runtime Exception: " << e.what() << std::endl;
-	}
-
-	mPlayer.setTexture(mTextures.get(Textures::Vehicle));
-	mPlayer.setPosition(640/2.f, 480/2.f);
-	mPlayer.setScale(0.4, 0.4);
-
+	mFont.loadFromFile("Media/Fonts/Sansation.ttf");
+	mStatisticsText.setFont(mFont);
+	mStatisticsText.setPosition(5.f, 5.f);
+	mStatisticsText.setCharacterSize(10);
 }
 
 
@@ -38,28 +33,37 @@ void Game::run()
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (mWindow.isOpen()) 
 	{
-		processEvents();
-		timeSinceLastUpdate += clock.restart();
+		sf::Time elapsedTime = clock.restart();
+		timeSinceLastUpdate += elapsedTime;
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
 			timeSinceLastUpdate -= TimePerFrame;
 			processEvents();
 			update(TimePerFrame);
 		}
+		updateStatistics(elapsedTime);
 		render();
 	}
 }
 
+
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 {
-		if (key == sf::Keyboard::Up)
-			mMovementDirection.mIsMovingUp = isPressed;
-		else if (key == sf::Keyboard::Down)
-			mMovementDirection.mIsMovingDown = isPressed;
-		else if (key == sf::Keyboard::Left)
-			mMovementDirection.mIsMovingLeft = isPressed;
-		else if (key == sf::Keyboard::Right)
-			mMovementDirection.mIsMovingRight = isPressed;
+	if (key == sf::Keyboard::Up)
+	{
+
+	}
+	else if (key == sf::Keyboard::Down)
+	{
+
+	}
+	else if (key == sf::Keyboard::Left)
+	{
+
+	}
+	else if (key == sf::Keyboard::Right)
+	{
+	}
 }
 
 void Game::processEvents()
@@ -89,22 +93,31 @@ void Game::processEvents()
 
 void Game::update(sf::Time elapsedTime)
 {
-	sf::Vector2f movement(0.f, 0.f);
-	if (mMovementDirection.mIsMovingUp)
-		movement.y -= PlayerSpeed;
-	if (mMovementDirection.mIsMovingDown)
-		movement.y += PlayerSpeed;
-	if (mMovementDirection.mIsMovingLeft)
-		movement.x -= PlayerSpeed;
-	if (mMovementDirection.mIsMovingRight)
-		movement.x += PlayerSpeed;
-	mPlayer.move(movement* elapsedTime.asSeconds());
-
+	mWorld.update(elapsedTime);
 }
 
 void Game::render()
 {
 	mWindow.clear();
-	mWindow.draw(mPlayer);
+	mWorld.draw();
+	mWindow.setView(mWindow.getDefaultView());
+	mWindow.draw(mStatisticsText);
 	mWindow.display();
 }
+
+void Game::updateStatistics(sf::Time elapsedTime)
+{
+	mStatisticsUpdateTime += elapsedTime;
+	mStatisticsNumFrames += 1;
+
+	if (mStatisticsUpdateTime >= sf::seconds(1.0f))
+	{
+		mStatisticsText.setString(
+			"Frames / Second = " + toString(mStatisticsNumFrames) + "\n" +
+			"Time / Update = " + toString(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us");
+
+		mStatisticsUpdateTime -= sf::seconds(1.0f);
+		mStatisticsNumFrames = 0;
+	}
+}
+
