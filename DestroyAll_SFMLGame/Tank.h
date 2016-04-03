@@ -14,7 +14,8 @@ public:
 
 public:
 	explicit Tank(Type type,const TextureHolder& textures);
-	virtual void drawCurrent(sf::RenderTarget& target,sf::RenderStates states) const;
+	virtual void draw(sf::RenderTarget& target,sf::RenderStates states) const;
+	virtual unsigned int	getCategory() const;
 	~Tank();
 
 private:

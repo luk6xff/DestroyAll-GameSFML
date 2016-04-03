@@ -1,5 +1,6 @@
 #include "Tank.h"
 #include "ResourceHolder.h"
+#include "Category.h"
 
 Textures::ID toTextureID(Tank::Type type)
 {
@@ -21,10 +22,23 @@ Tank::Tank(Type type, const TextureHolder& textures):mType(type), mSprite(textur
 }
 
 
-void Tank::drawCurrent(sf::RenderTarget & target, sf::RenderStates states) const
+void Tank::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
 	target.draw(mSprite, states);
 }
+
+unsigned int Tank::getCategory() const
+{
+	switch (mType)
+	{
+	case Tank::Player:
+		return Category::PlayerTank;
+
+	default:
+		return Category::EnemyTank;
+	}
+}
+
 
 Tank::~Tank()
 {

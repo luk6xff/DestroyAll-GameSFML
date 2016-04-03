@@ -11,6 +11,7 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game():mWindow(sf::VideoMode(640,480),"DestroyAll by igbt6 (2015)",sf::Style::Close),
   mWorld(mWindow)
+, mPlayer()
 , mFont()
 , mStatisticsText()
 , mStatisticsUpdateTime()
@@ -68,27 +69,18 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 void Game::processEvents()
 {
+	CommandQueue& commands = mWorld.getCommandQueue();
+
 	sf::Event event;
 	while (mWindow.pollEvent(event))
 	{
-		switch (event.type)
-		{
-			case sf::Event::Closed:
-				mWindow.close();
-				break;
-			case sf::Event::KeyPressed:
-				handlePlayerInput(event.key.code, true);
-				break;
-			case sf::Event::KeyReleased:
-				handlePlayerInput(event.key.code, false);
-				break;
-		}
+		mPlayer.handleEvent(event, commands);
 
 		if (event.type == sf::Event::Closed)
-		{
 			mWindow.close();
-		}
 	}
+
+	mPlayer.handleRealtimeInput(commands);
 }
 
 void Game::update(sf::Time elapsedTime)

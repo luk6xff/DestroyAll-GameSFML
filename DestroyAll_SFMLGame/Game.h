@@ -6,6 +6,7 @@
 #include <SFML/Graphics/Font.hpp>
 
 #include "World.h"
+#include "Player.h"
 
 
 class Game
@@ -26,11 +27,12 @@ private:
 private:
 
 	sf::RenderWindow mWindow;
-	World					mWorld;
-	sf::Font				mFont;
-	sf::Text				mStatisticsText;
-	sf::Time				mStatisticsUpdateTime;
-	std::size_t				mStatisticsNumFrames;
+	World mWorld;
+	Player mPlayer;
+	sf::Font mFont;
+	sf::Text mStatisticsText;
+	sf::Time mStatisticsUpdateTime;
+	std::size_t	mStatisticsNumFrames;
 
 };
 

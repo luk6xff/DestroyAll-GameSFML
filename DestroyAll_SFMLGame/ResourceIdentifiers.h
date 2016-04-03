@@ -12,7 +12,7 @@ namespace Textures
 	{
 		PlayerTank,
 		EnemyTank,
-		Backgorund
+		BackgorundTexture
 	};
 }
 
